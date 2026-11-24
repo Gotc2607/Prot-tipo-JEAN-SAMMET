@@ -323,7 +323,23 @@
             font-size: 20px;
             font-weight: 700;
             color: #f8fafc;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nf-title-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #0b1c3d;
+            border: 1px solid #163366;
+            color: #5895e5;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .nf-header-actions {
@@ -376,17 +392,17 @@
 
         .kpi-blue {
             background: #0b1224;
-            border: 1px solid #162442;
+            border: 1px solid #162c52;
         }
 
         .kpi-slate {
             background: #17181d;
-            border: 1px solid #262830;
+            border: 1px solid #282a33;
         }
 
         .kpi-orange {
             background: #1b1110;
-            border: 1px solid #3a2016;
+            border: 1px solid #422518;
         }
 
         .kpi-label-row {
@@ -756,8 +772,8 @@
 
         /* ========== WARNING BANNER (EXACT NO FLUXO STYLE) ========== */
         .nf-banner {
-            background: #1a0b10;
-            border: 1px solid #4a1c28;
+            background: #1f1611;
+            border: 1px solid #45311d;
             border-radius: 10px;
             padding: 10px 14px;
             margin-bottom: 14px;
@@ -767,11 +783,11 @@
             flex-wrap: wrap;
             gap: 10px;
             font-size: 12.5px;
-            color: #d6b4be;
+            color: #d6be8a;
         }
 
         .nf-banner strong {
-            color: #f8fafc;
+            color: #f5dd90;
         }
 
         .nf-banner-text {
@@ -1324,7 +1340,15 @@
     <main class="nf-main">
         <div class="nf-page-header">
             <div>
-                <div class="nf-page-title">Plano de Formatura</div>
+                <div class="nf-page-title">
+                    <span class="nf-title-icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </span>
+                    <span>Plano de Formatura</span>
+                </div>
                 <div class="nf-subtitle">Sequência personalizada de matérias para você se formar.</div>
             </div>
         </div>
@@ -1424,7 +1448,7 @@
         <!-- BANNER DE OPTATIVAS (EXATO DO NO FLUXO) -->
         <div class="nf-banner">
             <div class="nf-banner-text">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94862" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4a73b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true">
                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                     <line x1="12" y1="9" x2="12" y2="13"/>
                     <line x1="12" y1="17" x2="12.01" y2="17"/>
@@ -1569,11 +1593,22 @@
             renderColumns();
         }
 
+        function updateSliderTrack() {
+            const slider = document.getElementById('creditSlider');
+            if (!slider) return;
+            const min = parseFloat(slider.min) || 8;
+            const max = parseFloat(slider.max) || 32;
+            const val = parseFloat(slider.value) || 24;
+            const pct = ((val - min) / (max - min)) * 100;
+            slider.style.background = `linear-gradient(to right, #2a7ef8 0%, #2a7ef8 ${pct}%, #e9e9f1 ${pct}%, #e9e9f1 100%)`;
+        }
+
         function onSliderChange(val) {
             state.credits = parseInt(val, 10);
             document.getElementById('creditInput').value = state.credits;
             document.getElementById('creditHoursLabel').textContent = `cr (${state.credits * 15}h)`;
             document.getElementById('creditFeedback').classList.remove('visible');
+            updateSliderTrack();
         }
 
         function onCreditInputChange(raw) {
@@ -1590,6 +1625,7 @@
             document.getElementById('creditInput').value = val;
             document.getElementById('creditSlider').value = val;
             document.getElementById('creditHoursLabel').textContent = `cr (${val * 15}h)`;
+            updateSliderTrack();
 
             const fb = document.getElementById('creditFeedback');
             const inputEl = document.getElementById('creditInput');
@@ -1649,10 +1685,12 @@
             document.getElementById('creditInput').value = state.credits;
             document.getElementById('creditSlider').value = state.credits;
             document.getElementById('creditHoursLabel').textContent = `cr (${state.credits * 15}h)`;
+            updateSliderTrack();
         }
 
         function renderAll() {
             const isAfter = state.mode === 'after';
+            updateSliderTrack();
 
             // KPIs
             const isFastAfter = isAfter && state.goal === 'velocidade';
