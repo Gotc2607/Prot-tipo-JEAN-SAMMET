@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Permanent+Marker&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -215,87 +215,130 @@
             color: #090b10;
         }
 
-        /* ========== NO FLUXO REAL NAVBAR ========== */
-        .nf-navbar {
-            height: 56px;
+        /* ========== NO FLUXO REAL NAVBAR (FLOATING PILL) ========== */
+        .nf-navbar-wrap {
+            max-width: 1460px;
+            margin: 14px auto 4px;
             padding: 0 24px;
-            border-bottom: 1px solid #171b26;
-            background: #090c13;
+        }
+
+        .nf-navbar {
+            height: 62px;
+            padding: 0 26px 0 34px;
+            border: 1px solid #201e2b;
+            border-radius: 9999px;
+            background: #050506;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
         }
 
         .nf-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 15px;
-            color: #f8fafc;
-            letter-spacing: -0.02em;
+            display: inline-flex;
+            align-items: baseline;
+            font-family: 'Permanent Marker', cursive;
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            line-height: 1;
+            user-select: none;
         }
 
-        .nf-logo-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 7px;
-            background: linear-gradient(135deg, #2563eb, #06b6d4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 800;
-            color: #fff;
+        .nf-logo-noflx {
+            color: #ffffff;
+        }
+
+        .nf-logo-unb {
+            color: #9e46f6;
+            margin-left: 1px;
         }
 
         .nf-nav-links {
             display: flex;
             align-items: center;
-            gap: 20px;
-            font-size: 13px;
-            color: #94a3b8;
+            gap: 28px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #d4d4d8;
+        }
+
+        .nf-nav-links span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 0;
+            cursor: default;
         }
 
         .nf-nav-links span.active {
-            color: #f8fafc;
-            font-weight: 600;
+            color: #ffffff;
             position: relative;
         }
 
         .nf-nav-links span.active::after {
             content: '';
             position: absolute;
-            bottom: -19px;
+            bottom: -1px;
             left: 0;
             right: 0;
             height: 2px;
-            background: #3b82f6;
+            background: linear-gradient(90deg, #9e46f6, #7e3af2);
+            border-radius: 2px;
         }
 
-        .nf-user {
+        .nf-nav-right {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #cbd5e1;
-            background: #121520;
-            border: 1px solid #222736;
-            padding: 5px 10px;
-            border-radius: 999px;
+            gap: 10px;
+        }
+
+        .nf-icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #141417;
+            border: 1px solid #26262d;
+            color: #e4e4e7;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+
+        .nf-bell-btn {
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            color: #e4e4e7;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
         }
 
         .nf-avatar {
-            width: 20px;
-            height: 20px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            background: #1e3a8a;
-            color: #93c5fd;
-            font-size: 10px;
+            background: linear-gradient(135deg, #a855f7, #8b35e8);
+            color: #ffffff;
+            font-size: 13px;
             font-weight: 700;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 0 18px rgba(158, 70, 246, 0.55);
+            margin-left: 2px;
+        }
+
+        @media (max-width: 760px) {
+            .nf-nav-links {
+                display: none;
+            }
         }
 
         /* ========== MAIN CONTAINER (NO FLUXO LAYOUT) ========== */
@@ -1319,22 +1362,46 @@
     </div>
 
     <!-- ========== NAVBAR ORIGINAL DO NO FLUXO ========== -->
-    <header class="nf-navbar">
-        <div class="nf-logo">
-            <div class="nf-logo-icon">NF</div>
-            <span>No Fluxo <span style="color:#64748b; font-weight:500;">UnB</span></span>
-        </div>
-        <nav class="nf-nav-links">
-            <span>Fluxograma</span>
-            <span class="active">Plano de Formatura</span>
-            <span>Disciplinas</span>
-            <span>Darcy AI</span>
-        </nav>
-        <div class="nf-user">
-            <div class="nf-avatar">ES</div>
-            <span>Eng. de Software (6360/1)</span>
-        </div>
-    </header>
+    <div class="nf-navbar-wrap">
+        <header class="nf-navbar">
+            <div class="nf-logo">
+                <span class="nf-logo-noflx">NOFLX</span><span class="nf-logo-unb">UNB</span>
+            </div>
+            <nav class="nf-nav-links" aria-label="Navegação principal">
+                <span>FLUXOGRAMAS</span>
+                <span>MEU FLUXOGRAMA</span>
+                <span class="active">
+                    PLANEJAMENTO
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </span>
+            </nav>
+            <div class="nf-nav-right">
+                <span class="nf-icon-btn" title="Acessibilidade" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <circle cx="12" cy="8" r="1.2" fill="currentColor"></circle>
+                        <path d="M8.5 11.2h7"></path>
+                        <path d="M12 11.2v3.6"></path>
+                        <path d="M10 17.5l2-2.7 2 2.7"></path>
+                    </svg>
+                </span>
+                <span class="nf-icon-btn" title="Tema escuro" aria-hidden="true">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </span>
+                <span class="nf-bell-btn" title="Notificações" aria-hidden="true">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </span>
+                <div class="nf-avatar" title="Eng. de Software (6360/1)">G</div>
+            </div>
+        </header>
+    </div>
 
     <!-- ========== CONTEÚDO PRINCIPAL (DESIGN IDÊNTICO AO NO FLUXO) ========== -->
     <main class="nf-main">
