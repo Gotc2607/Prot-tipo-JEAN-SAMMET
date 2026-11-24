@@ -12,22 +12,22 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-page: #090b10;
-            --bg-canvas: #07090e;
-            --bg-card: #11141e;
-            --bg-card-hover: #151926;
-            --bg-header-card: #0e1118;
-            --border-subtle: #1f2433;
-            --border-card: #242a3a;
-            --accent-blue: #3b82f6;
-            --accent-blue-soft: rgba(59, 130, 246, 0.14);
-            --accent-orange: #ea580c;
-            --accent-orange-text: #fb923c;
-            --accent-emerald: #10b981;
+            --bg-page: #090c13;
+            --bg-canvas: #090c13;
+            --bg-card: #171723;
+            --bg-card-hover: #1d1e2d;
+            --bg-header-card: #0b0e15;
+            --border-subtle: #1b1f2c;
+            --border-card: #262738;
+            --accent-blue: #2f64a8;
+            --accent-blue-soft: rgba(47, 100, 168, 0.16);
+            --accent-orange: #b5471c;
+            --accent-orange-text: #c2713a;
+            --accent-emerald: #26c297;
             --accent-purple: #a855f7;
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            --text-muted: #6b707c;
         }
 
         * {
@@ -219,8 +219,8 @@
         .nf-navbar {
             height: 56px;
             padding: 0 24px;
-            border-bottom: 1px solid #181c27;
-            background: #090b10;
+            border-bottom: 1px solid #171b26;
+            background: #090c13;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -375,18 +375,18 @@
         }
 
         .kpi-blue {
-            background: linear-gradient(180deg, rgba(23, 37, 84, 0.36) 0%, rgba(15, 23, 42, 0.45) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.28);
+            background: #0b1224;
+            border: 1px solid #162442;
         }
 
         .kpi-slate {
-            background: #10131b;
-            border: 1px solid #222736;
+            background: #17181d;
+            border: 1px solid #262830;
         }
 
         .kpi-orange {
-            background: linear-gradient(180deg, rgba(67, 20, 7, 0.42) 0%, rgba(28, 15, 10, 0.45) 100%);
-            border: 1px solid rgba(234, 88, 12, 0.35);
+            background: #1b1110;
+            border: 1px solid #3a2016;
         }
 
         .kpi-label-row {
@@ -405,19 +405,19 @@
         }
 
         .kpi-blue .kpi-label {
-            color: #60a5fa;
+            color: #557fb3;
         }
 
         .kpi-slate .kpi-label {
-            color: #94a3b8;
+            color: #8c919c;
         }
 
         .kpi-orange .kpi-label {
-            color: #fb923c;
+            color: #b56835;
         }
 
         .kpi-value {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
             color: #f8fafc;
             margin-bottom: 2px;
@@ -431,17 +431,15 @@
         }
 
         .kpi-blue .kpi-sub {
-            color: #60a5fa;
-            opacity: 0.78;
+            color: #3f608a;
         }
 
         .kpi-slate .kpi-sub {
-            color: #64748b;
+            color: #6b707c;
         }
 
         .kpi-orange .kpi-sub {
-            color: #ea580c;
-            opacity: 0.9;
+            color: #8a4b25;
         }
 
         .calendar-badge {
@@ -551,14 +549,39 @@
 
         .credits-slider {
             width: 120px;
-            accent-color: #3b82f6;
+            accent-color: #e2e0ec;
+            cursor: pointer;
+            height: 6px;
+            border-radius: 999px;
+            background: #e2e0ec;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .credits-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #6b7280;
+            border: 2px solid #e2e0ec;
+            cursor: pointer;
+        }
+
+        .credits-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #6b7280;
+            border: 2px solid #e2e0ec;
             cursor: pointer;
         }
 
         .credits-input {
             width: 52px;
-            background: #131723;
-            border: 1px solid #2b3246;
+            background: #171626;
+            border: 1px solid #2a2a3d;
             border-radius: 6px;
             color: #f8fafc;
             font-family: inherit;
@@ -628,28 +651,26 @@
 
         .unit-toggle {
             display: inline-flex;
-            background: #0f121a;
-            border: 1px solid #23293a;
-            border-radius: 8px;
-            padding: 2px;
+            gap: 6px;
         }
 
         .unit-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: #94a3b8;
+            background: #151820;
+            border: 1px solid #252934;
+            color: #9ca3af;
             font-family: inherit;
             font-size: 12px;
             font-weight: 500;
-            padding: 5px 12px;
-            border-radius: 6px;
+            padding: 6px 13px;
+            border-radius: 7px;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .unit-btn.active {
-            background: rgba(30, 58, 138, 0.45);
-            border-color: rgba(59, 130, 246, 0.55);
-            color: #93c5fd;
+            background: #09225c;
+            border-color: #214ea8;
+            color: #dbeafe;
             font-weight: 600;
         }
 
@@ -735,8 +756,8 @@
 
         /* ========== WARNING BANNER (EXACT NO FLUXO STYLE) ========== */
         .nf-banner {
-            background: linear-gradient(90deg, rgba(69, 26, 3, 0.34) 0%, rgba(45, 22, 8, 0.28) 100%);
-            border: 1px solid rgba(217, 119, 6, 0.35);
+            background: #1a0b10;
+            border: 1px solid #4a1c28;
             border-radius: 10px;
             padding: 10px 14px;
             margin-bottom: 14px;
@@ -746,7 +767,11 @@
             flex-wrap: wrap;
             gap: 10px;
             font-size: 12.5px;
-            color: #fde68a;
+            color: #d6b4be;
+        }
+
+        .nf-banner strong {
+            color: #f8fafc;
         }
 
         .nf-banner-text {
@@ -756,9 +781,9 @@
         }
 
         .darcy-btn {
-            background: rgba(131, 24, 67, 0.35);
-            border: 1px solid rgba(219, 39, 119, 0.45);
-            color: #f9a8d4;
+            background: #331022;
+            border: 1px solid #6b2145;
+            color: #f0bed9;
             font-family: inherit;
             font-size: 12px;
             font-weight: 600;
@@ -801,9 +826,9 @@
         .flow-canvas {
             position: relative;
             background-color: var(--bg-canvas);
-            background-image: radial-gradient(#1e2333 1.1px, transparent 1.1px);
+            background-image: radial-gradient(#171c28 1.1px, transparent 1.1px);
             background-size: 20px 20px;
-            border: 1px solid #1e2332;
+            border: 1px solid #181c28;
             border-radius: 12px;
             padding: 26px 24px 44px;
             overflow-x: auto;
@@ -827,8 +852,8 @@
         }
 
         .sem-header {
-            background: #0e1118;
-            border: 1px solid #222736;
+            background: #0b0e15;
+            border: 1px solid #1e222e;
             border-radius: 10px;
             padding: 11px 13px;
             text-align: center;
@@ -848,19 +873,20 @@
         .sem-progress {
             font-size: 11px;
             font-weight: 600;
-            color: #34d399;
+            color: #3a997c;
         }
 
         .sem-load-meta {
             font-size: 10.5px;
-            color: #64748b;
+            color: #6b707c;
             margin-top: 2px;
         }
 
         /* ========== DISCIPLINE CARD (EXACT NO FLUXO STYLE) ========== */
         .disc-card {
-            background: #11141e;
-            border: 1px solid #242a3a;
+            background: #171723;
+            border: 1px solid #262738;
+            border-left: 3px solid #4c5264;
             border-radius: 9px;
             padding: 11px 12px;
             position: relative;
@@ -868,12 +894,12 @@
         }
 
         .disc-card.recommended {
-            border-left: 3px solid #3b82f6;
+            border-left: 3px solid #2f64a8;
         }
 
         .disc-card.added-fix {
             border-left: 3px solid #10b981;
-            background: linear-gradient(180deg, rgba(6, 78, 59, 0.22) 0%, #11141e 100%);
+            background: linear-gradient(180deg, rgba(6, 78, 59, 0.22) 0%, #171723 100%);
         }
 
         .disc-card.oferta-bug {
@@ -900,7 +926,7 @@
             font-size: 10.5px;
             font-weight: 600;
             color: #cbd5e1;
-            background: #1e2334;
+            background: #252638;
             padding: 2px 7px;
             border-radius: 999px;
         }
@@ -924,7 +950,7 @@
 
         .disc-reason {
             font-size: 10px;
-            color: #64748b;
+            color: #7c8294;
             max-width: 82px;
             line-height: 1.2;
         }
@@ -939,9 +965,9 @@
         .badge-dif {
             font-size: 10px;
             font-weight: 600;
-            color: #34d399;
-            background: rgba(6, 78, 59, 0.45);
-            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #26c297;
+            background: #0f2c27;
+            border: 1px solid #18574a;
             padding: 2px 6px;
             border-radius: 999px;
         }
@@ -949,9 +975,9 @@
         .badge-critica {
             font-size: 10px;
             font-weight: 700;
-            color: #fed7aa;
-            background: #9a3412;
-            border: 1px solid #ea580c;
+            color: #ffedd5;
+            background: #8f3514;
+            border: 1px solid #b5471c;
             padding: 2px 7px;
             border-radius: 999px;
             display: inline-flex;
@@ -1398,7 +1424,11 @@
         <!-- BANNER DE OPTATIVAS (EXATO DO NO FLUXO) -->
         <div class="nf-banner">
             <div class="nf-banner-text">
-                <span>⚠️</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d94862" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
                 <span>Faltam <strong>60h de optativas</strong> para escolher: o plano reservou o espaço nos semestres,
                     mas as matérias ainda não foram definidas. Escolha com o Darcy AI para bater as horas e se
                     formar.</span>
