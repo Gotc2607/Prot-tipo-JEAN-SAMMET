@@ -14,10 +14,16 @@ Protótipo interativo em **Antes vs. Depois** desenvolvido como entrega técnica
 
 Não requer instalação de dependências nem servidor: basta abrir o arquivo `index.html` diretamente no navegador (Chrome, Firefox ou Edge).
 
-## Como publicar no GitHub Pages (em repositório separado)
+## Acesso Online (GitHub Pages)
 
-1. Crie um novo repositório no GitHub (ex.: `prototipo-no-fluxo-melhorias`).
-2. Copie os arquivos desta pasta (`index.html` e `README.md`) para o novo repositório e faça `git push`.
-3. Em **Settings → Pages → Build and deployment**, selecione **Deploy from a branch** (`main`, pasta `/ (root)`) e salve.
-4. Em cerca de 1 minuto o protótipo estará online em `https://<seu-usuario>.github.io/prototipo-no-fluxo-melhorias/`.
+O protótipo está configurado para publicação automática via GitHub Actions em:
+
+- **URL:** `https://gotc2607.github.io/Prot-tipo-JEAN-SAMMET/`
+
+### Ativação no GitHub (primeira vez)
+
+1. Faça push das alterações para a branch `main`.
+2. No repositório no GitHub, acesse **Settings → Pages → Build and deployment**.
+3. Em **Source**, selecione **GitHub Actions**.
+4. O workflow `.github/workflows/deploy-pages.yml` publicará o site automaticamente a cada push na `main` (também pode ser acionado manualmente na aba **Actions**).
 

@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>No Fluxo UnB — Protótipo de Melhorias (Jean Sammet)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #090b10;
+            --bg-canvas: #07090e;
+            --bg-card: #11141e;
+            --bg-card-hover: #151926;
+            --bg-header-card: #0e1118;
+            --border-subtle: #1f2433;
+            --border-card: #242a3a;
+            --accent-blue: #3b82f6;
+            --accent-blue-soft: rgba(59, 130, 246, 0.14);
+            --accent-orange: #ea580c;
+            --accent-orange-text: #fb923c;
+            --accent-emerald: #10b981;
+            --accent-purple: #a855f7;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== DEMO PRESENTATION RIBBON ========== */
+        .demo-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 12, 20, 0.94);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #262c40;
+            padding: 10px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .demo-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .demo-pill-badge {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 999px;
+        }
+
+        .demo-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .demo-controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .mode-switch {
+            display: inline-flex;
+            background: #0d1018;
+            border: 1px solid #272e42;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn.active-before {
+            background: #1e2436;
+            color: #f8fafc;
+            box-shadow: inset 0 0 0 1px #3b4460;
+        }
+
+        .mode-btn.active-after {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #ffffff;
+            box-shadow: 0 0 14px rgba(37, 99, 235, 0.35);
+        }
+
+        .highlight-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #cbd5e1;
+            background: #121624;
+            border: 1px solid #283047;
+            padding: 6px 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            transition: border-color 0.2s;
+        }
+
+        .highlight-toggle:hover {
+            border-color: #3b82f6;
+        }
+
+        .highlight-toggle input {
+            accent-color: #38bdf8;
+            cursor: pointer;
+        }
+
+        .tour-pills {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 20px;
+            background: #0b0d15;
+            border-bottom: 1px solid #181c28;
+            overflow-x: auto;
+        }
+
+        .tour-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+
+        .tour-pill {
+            background: #121622;
+            border: 1px solid #23293d;
+            color: #cbd5e1;
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tour-pill:hover,
+        .tour-pill.active {
+            background: rgba(56, 189, 248, 0.14);
+            border-color: #38bdf8;
+            color: #e0f2fe;
+        }
+
+        .tour-pill .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            background: #1e293b;
+            color: #38bdf8;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .tour-pill.active .num {
+            background: #38bdf8;
+            color: #090b10;
+        }
+
+        /* ========== NO FLUXO REAL NAVBAR ========== */
+        .nf-navbar {
+            height: 56px;
+            padding: 0 24px;
+            border-bottom: 1px solid #181c27;
+            background: #090b10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nf-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            color: #f8fafc;
+            letter-spacing: -0.02em;
+        }
+
+        .nf-logo-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .nf-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .nf-nav-links span.active {
+            color: #f8fafc;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .nf-nav-links span.active::after {
+            content: '';
+            position: absolute;
+            bottom: -19px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3b82f6;
+        }
+
+        .nf-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #cbd5e1;
+            background: #121520;
+            border: 1px solid #222736;
+            padding: 5px 10px;
+            border-radius: 999px;
+        }
+
+        .nf-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #1e3a8a;
+            color: #93c5fd;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ========== MAIN CONTAINER (NO FLUXO LAYOUT) ========== */
+        .nf-main {
+            max-width: 1460px;
+            margin: 0 auto;
+            padding: 18px 24px 96px;
+        }
+
+        .nf-page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .nf-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .nf-page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 2px;
+        }
+
+        .nf-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nf-pref-btn {
+            background: #121622;
+            border: 1px solid #262d40;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 500;
+            padding: 7px 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s;
+        }
+
+        .nf-pref-btn:hover {
+            background: #191e2e;
+            border-color: #3b82f6;
+        }
+
+        /* ========== KPI CARDS (EXACT NO FLUXO STYLE) ========== */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 820px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .kpi-card {
+            border-radius: 10px;
+            padding: 14px 18px;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .kpi-blue {
+            background: linear-gradient(180deg, rgba(23, 37, 84, 0.36) 0%, rgba(15, 23, 42, 0.45) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+        }
+
+        .kpi-slate {
+            background: #10131b;
+            border: 1px solid #222736;
+        }
+
+        .kpi-orange {
+            background: linear-gradient(180deg, rgba(67, 20, 7, 0.42) 0%, rgba(28, 15, 10, 0.45) 100%);
+            border: 1px solid rgba(234, 88, 12, 0.35);
+        }
+
+        .kpi-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .kpi-blue .kpi-label {
+            color: #60a5fa;
+        }
+
+        .kpi-slate .kpi-label {
+            color: #94a3b8;
+        }
+
+        .kpi-orange .kpi-label {
+            color: #fb923c;
+        }
+
+        .kpi-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kpi-sub {
+            font-size: 11.5px;
+        }
+
+        .kpi-blue .kpi-sub {
+            color: #60a5fa;
+            opacity: 0.78;
+        }
+
+        .kpi-slate .kpi-sub {
+            color: #64748b;
+        }
+
+        .kpi-orange .kpi-sub {
+            color: #ea580c;
+            opacity: 0.9;
+        }
+
+        .calendar-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.14);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+        }
+
+        /* ========== HELP TOOLTIP (IMPROVEMENT #1) ========== */
+        .help-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(251, 146, 60, 0.16);
+            border: 1px solid rgba(251, 146, 60, 0.45);
+            color: #fdba74;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: help;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .help-trigger:hover,
+        .help-trigger:focus {
+            background: rgba(251, 146, 60, 0.3);
+            outline: none;
+        }
+
+        .nf-tooltip {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 280px;
+            background: #131724;
+            border: 1px solid #334155;
+            border-radius: 9px;
+            padding: 11px 13px;
+            color: #e2e8f0;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.45;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+            z-index: 60;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-4px);
+            transition: all 0.18s ease;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .help-trigger:hover .nf-tooltip,
+        .help-trigger:focus .nf-tooltip,
+        .help-trigger.force-open .nf-tooltip {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .nf-tooltip strong {
+            color: #fb923c;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        /* ========== CONTROLS BAR (CREDITS SLIDER + TOGGLE) ========== */
+        .controls-bar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .credits-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+            padding: 6px 10px;
+            margin: -6px -10px;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .credits-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .credits-slider {
+            width: 120px;
+            accent-color: #3b82f6;
+            cursor: pointer;
+        }
+
+        .credits-input {
+            width: 52px;
+            background: #131723;
+            border: 1px solid #2b3246;
+            border-radius: 6px;
+            color: #f8fafc;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 8px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .credits-input:focus {
+            border-color: #3b82f6;
+        }
+
+        .credits-input.invalid-flash {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+        }
+
+        .test-invalid-btn {
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px dashed rgba(245, 158, 11, 0.45);
+            color: #fbbf24;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .test-invalid-btn:hover {
+            background: rgba(245, 158, 11, 0.22);
+        }
+
+        .credits-feedback {
+            font-size: 11.5px;
+            color: #fbbf24;
+            background: rgba(120, 53, 15, 0.25);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            padding: 5px 10px;
+            border-radius: 6px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            max-width: 520px;
+        }
+
+        .credits-feedback.visible {
+            display: inline-flex;
+        }
+
+        .onboarding-active-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.38);
+            color: #93c5fd;
+        }
+
+        .unit-toggle {
+            display: inline-flex;
+            background: #0f121a;
+            border: 1px solid #23293a;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .unit-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #94a3b8;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .unit-btn.active {
+            background: rgba(30, 58, 138, 0.45);
+            border-color: rgba(59, 130, 246, 0.55);
+            color: #93c5fd;
+            font-weight: 600;
+        }
+
+        /* ========== ONBOARDING PREFERENCES INLINE PANEL (IMPROVEMENT #3) ========== */
+        .onboarding-panel {
+            background: #0e111a;
+            border: 1px solid #232a3e;
+            border-radius: 10px;
+            padding: 13px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            position: relative;
+        }
+
+        .onboarding-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .onboarding-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .opt-pill-group {
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .opt-pill {
+            background: #141826;
+            border: 1px solid #262e45;
+            color: #94a3b8;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 11px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .opt-pill:hover {
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        .opt-pill.selected {
+            background: rgba(37, 99, 235, 0.22);
+            border-color: #3b82f6;
+            color: #bfdbfe;
+            font-weight: 600;
+        }
+
+        .onboarding-status-msg {
+            font-size: 11.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .onboarding-status-msg.warn {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .onboarding-status-msg.ok {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.32);
+            color: #6ee7b7;
+        }
+
+        /* ========== WARNING BANNER (EXACT NO FLUXO STYLE) ========== */
+        .nf-banner {
+            background: linear-gradient(90deg, rgba(69, 26, 3, 0.34) 0%, rgba(45, 22, 8, 0.28) 100%);
+            border: 1px solid rgba(217, 119, 6, 0.35);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 12.5px;
+            color: #fde68a;
+        }
+
+        .nf-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .darcy-btn {
+            background: rgba(131, 24, 67, 0.35);
+            border: 1px solid rgba(219, 39, 119, 0.45);
+            color: #f9a8d4;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: default;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ========== COMPLETENESS STATUS BAR (IMPROVEMENT #4) ========== */
+        .completeness-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #0d121d;
+            border: 1px solid #1f2b42;
+            border-radius: 10px;
+            padding: 9px 14px;
+            margin-bottom: 14px;
+            font-size: 12px;
+        }
+
+        .completeness-ok {
+            border-color: rgba(16, 185, 129, 0.35);
+            background: rgba(6, 78, 59, 0.18);
+            color: #a7f3d0;
+        }
+
+        .completeness-bug {
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(127, 29, 29, 0.14);
+            color: #fecaca;
+        }
+
+        /* ========== SVELTE FLOW CANVAS (EXACT NO FLUXO STYLE) ========== */
+        .flow-canvas {
+            position: relative;
+            background-color: var(--bg-canvas);
+            background-image: radial-gradient(#1e2333 1.1px, transparent 1.1px);
+            background-size: 20px 20px;
+            border: 1px solid #1e2332;
+            border-radius: 12px;
+            padding: 26px 24px 44px;
+            overflow-x: auto;
+            min-height: 540px;
+        }
+
+        .flow-columns {
+            display: flex;
+            align-items: flex-start;
+            gap: 44px;
+            min-width: max-content;
+            position: relative;
+        }
+
+        .sem-col {
+            width: 248px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+        }
+
+        .sem-header {
+            background: #0e1118;
+            border: 1px solid #222736;
+            border-radius: 10px;
+            padding: 11px 13px;
+            text-align: center;
+        }
+
+        .sem-header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+
+        .sem-progress {
+            font-size: 11px;
+            font-weight: 600;
+            color: #34d399;
+        }
+
+        .sem-load-meta {
+            font-size: 10.5px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        /* ========== DISCIPLINE CARD (EXACT NO FLUXO STYLE) ========== */
+        .disc-card {
+            background: #11141e;
+            border: 1px solid #242a3a;
+            border-radius: 9px;
+            padding: 11px 12px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .disc-card.recommended {
+            border-left: 3px solid #3b82f6;
+        }
+
+        .disc-card.added-fix {
+            border-left: 3px solid #10b981;
+            background: linear-gradient(180deg, rgba(6, 78, 59, 0.22) 0%, #11141e 100%);
+        }
+
+        .disc-card.oferta-bug {
+            border-color: rgba(245, 158, 11, 0.55);
+            border-left: 3px solid #f59e0b;
+        }
+
+        .disc-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .disc-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #e2e8f0;
+            letter-spacing: 0.02em;
+        }
+
+        .disc-hours {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #cbd5e1;
+            background: #1e2334;
+            padding: 2px 7px;
+            border-radius: 999px;
+        }
+
+        .disc-name {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.35;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .disc-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .disc-reason {
+            font-size: 10px;
+            color: #64748b;
+            max-width: 82px;
+            line-height: 1.2;
+        }
+
+        .disc-badges {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: auto;
+        }
+
+        .badge-dif {
+            font-size: 10px;
+            font-weight: 600;
+            color: #34d399;
+            background: rgba(6, 78, 59, 0.45);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 2px 6px;
+            border-radius: 999px;
+        }
+
+        .badge-critica {
+            font-size: 10px;
+            font-weight: 700;
+            color: #fed7aa;
+            background: #9a3412;
+            border: 1px solid #ea580c;
+            padding: 2px 7px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            position: relative;
+        }
+
+        .badge-critica.has-tip {
+            cursor: help;
+        }
+
+        .badge-critica .mini-tip {
+            position: absolute;
+            bottom: calc(100% + 7px);
+            right: 0;
+            width: 230px;
+            background: #131724;
+            border: 1px solid #ea580c;
+            border-radius: 8px;
+            padding: 8px 10px;
+            color: #f1f5f9;
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1.4;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(4px);
+            transition: all 0.16s ease;
+            z-index: 50;
+            text-transform: none;
+        }
+
+        .badge-critica.has-tip:hover .mini-tip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .badge-oferta {
+            margin-top: 8px;
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 5px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            line-height: 1.3;
+        }
+
+        .badge-oferta.ok {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.32);
+            color: #6ee7b7;
+        }
+
+        .badge-oferta.warn {
+            background: rgba(245, 158, 11, 0.14);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fde68a;
+        }
+
+        .badge-new-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 2px 7px;
+            border-radius: 999px;
+            margin-bottom: 6px;
+        }
+
+        /* Dashed connector line visual */
+        .connector-arrow {
+            position: absolute;
+            right: -44px;
+            top: 50%;
+            width: 44px;
+            height: 2px;
+            border-top: 1.5px dashed #334155;
+            pointer-events: none;
+        }
+
+        .connector-arrow::after {
+            content: '▸';
+            position: absolute;
+            right: -3px;
+            top: -9px;
+            color: #475569;
+            font-size: 11px;
+        }
+
+        /* Svelte Flow Watermark & Zoom */
+        .flow-zoom {
+            position: absolute;
+            left: 14px;
+            bottom: 14px;
+            background: #11141e;
+            border: 1px solid #242a3a;
+            border-radius: 7px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .flow-zoom span {
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 13px;
+            border-bottom: 1px solid #1e2332;
+        }
+
+        .flow-zoom span:last-child {
+            border-bottom: none;
+        }
+
+        .flow-watermark {
+            position: absolute;
+            right: 12px;
+            bottom: 10px;
+            background: rgba(17, 20, 30, 0.85);
+            border: 1px solid #222736;
+            color: #64748b;
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 4px;
+        }
+
+        /* ========== IMPROVEMENT SPOTLIGHT HIGHLIGHT SYSTEM ========== */
+        body.show-highlights .spot-target {
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.75), 0 0 18px rgba(56, 189, 248, 0.22);
+        }
+
+        .spot-target.spot-focused {
+            box-shadow: 0 0 0 2.5px #38bdf8, 0 0 28px rgba(56, 189, 248, 0.45) !important;
+            animation: pulseRing 1.8s infinite;
+        }
+
+        @keyframes pulseRing {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 2.5px #38bdf8, 0 0 22px rgba(56, 189, 248, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.85), 0 0 32px rgba(56, 189, 248, 0.6);
+            }
+        }
+
+        .spot-pin {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #060910;
+            font-size: 11px;
+            font-weight: 800;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(56, 189, 248, 0.6);
+            z-index: 30;
+            cursor: pointer;
+            border: 2px solid #090b10;
+        }
+
+        body.show-highlights .spot-pin {
+            display: flex;
+        }
+
+        /* ========== INSPECTOR CARD (BOTTOM RIGHT FLOATING EXPLAINER) ========== */
+        .inspector-card {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 370px;
+            max-width: calc(100vw - 40px);
+            background: rgba(15, 19, 30, 0.96);
+            backdrop-filter: blur(14px);
+            border: 1px solid #2e3b5c;
+            border-radius: 12px;
+            padding: 15px 16px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.72);
+            z-index: 90;
+            transition: all 0.2s ease;
+        }
+
+        .inspector-card.hidden {
+            display: none;
+        }
+
+        .inspector-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .inspector-tag {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+        }
+
+        .inspector-close {
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+
+        .inspector-close:hover {
+            color: #f8fafc;
+        }
+
+        .inspector-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 6px;
+        }
+
+        .inspector-desc {
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .inspector-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #0a0d16;
+            border: 1px solid #1e263b;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11px;
+        }
+
+        .im-col span {
+            display: block;
+            color: #64748b;
+            font-size: 10px;
+            margin-bottom: 2px;
+        }
+
+        .im-before strong {
+            color: #f87171;
+        }
+
+        .im-after strong {
+            color: #34d399;
+        }
+    </style>
+</head>
+
+<body class="show-highlights">
+
+    <!-- ========== BARRA DE DEMONSTRAÇÃO (CONTROLES DA APRESENTAÇÃO) ========== -->
+    <div class="demo-bar">
+        <div class="demo-brand">
+            <span class="demo-pill-badge">Protótipo Jean Sammet</span>
+            <span class="demo-title">Proposta de Melhorias — Usabilidade &amp; Adequação Funcional</span>
+        </div>
+
+        <div class="demo-controls">
+            <div class="mode-switch" role="group" aria-label="Alternar versão">
+                <button id="btnModeBefore" class="mode-btn" onclick="setMode('before')">
+                    ⚪ No Fluxo Atual (Antes)
+                </button>
+                <button id="btnModeAfter" class="mode-btn active-after" onclick="setMode('after')">
+                    ✨ Com Melhorias (Depois)
+                </button>
+            </div>
+
+            <label class="highlight-toggle">
+                <input type="checkbox" id="chkHighlights" checked onchange="toggleHighlights(this.checked)" />
+                Destacar pontos de melhoria
+            </label>
+        </div>
+    </div>
+
+    <!-- ========== BARRA DE TOUR GUIADO PELOS 5 PONTOS ========== -->
+    <div class="tour-pills">
+        <span class="tour-label">Pontos de Melhoria:</span>
+        <button class="tour-pill" data-spot="1" onclick="focusSpot(1)">
+            <span class="num">1</span> Termos Críticas/Estratégicas (Usab. H2)
+        </button>
+        <button class="tour-pill" data-spot="2" onclick="focusSpot(2)">
+            <span class="num">2</span> Feedback de Créditos 8–32 (Usab. H9)
+        </button>
+        <button class="tour-pill" data-spot="3" onclick="focusSpot(3)">
+            <span class="num">3</span> Onboarding: Estágio &amp; Velocidade (COO)
+        </button>
+        <button class="tour-pill" data-spot="4" onclick="focusSpot(4)">
+            <span class="num">4</span> Obrigatória FGA0206 no Plano (CDO)
+        </button>
+        <button class="tour-pill" data-spot="5" onclick="focusSpot(5)">
+            <span class="num">5</span> Oferta FGA0244 &amp; Calendário (TVS)
+        </button>
+    </div>
+
+    <!-- ========== NAVBAR ORIGINAL DO NO FLUXO ========== -->
+    <header class="nf-navbar">
+        <div class="nf-logo">
+            <div class="nf-logo-icon">NF</div>
+            <span>No Fluxo <span style="color:#64748b; font-weight:500;">UnB</span></span>
+        </div>
+        <nav class="nf-nav-links">
+            <span>Fluxograma</span>
+            <span class="active">Plano de Formatura</span>
+            <span>Disciplinas</span>
+            <span>Darcy AI</span>
+        </nav>
+        <div class="nf-user">
+            <div class="nf-avatar">ES</div>
+            <span>Eng. de Software (6360/1)</span>
+        </div>
+    </header>
+
+    <!-- ========== CONTEÚDO PRINCIPAL (DESIGN IDÊNTICO AO NO FLUXO) ========== -->
+    <main class="nf-main">
+        <div class="nf-page-header">
+            <div>
+                <div class="nf-page-title">Plano de Formatura</div>
+                <div class="nf-subtitle">Sequência personalizada de matérias para você se formar.</div>
+            </div>
+        </div>
+
+        <!-- 3 CARDS DE KPI -->
+        <section class="kpi-grid">
+            <!-- KPI 1: FORMATURA -->
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-label-row">
+                    <span class="kpi-label">FORMATURA</span>
+                    <span id="calendarBadge" class="calendar-badge">✓ Calendário UnB validado</span>
+                </div>
+                <div class="kpi-value" id="kpiFormatura">2028.1</div>
+                <div class="kpi-sub">semestre previsto</div>
+            </div>
+
+            <!-- KPI 2: SEMESTRES -->
+            <div class="kpi-card kpi-slate">
+                <div class="kpi-label-row">
+                    <span class="kpi-label">SEMESTRES</span>
+                </div>
+                <div class="kpi-value" id="kpiSemestres">3</div>
+                <div class="kpi-sub">restantes até formatura</div>
+            </div>
+
+            <!-- KPI 3: CRÍTICAS (PONTO DE MELHORIA #1) -->
+            <div class="kpi-card kpi-orange spot-target" id="spot1">
+                <button class="spot-pin" onclick="focusSpot(1)" title="Ver melhoria 1">1</button>
+                <div class="kpi-label-row">
+                    <span class="kpi-label">CRÍTICAS</span>
+                    <span id="helpCriticas" class="help-trigger" tabindex="0"
+                        aria-label="Explicação de matérias críticas e estratégicas">
+                        ?
+                        <span class="nf-tooltip">
+                            <strong>O que são matérias críticas / estratégicas?</strong>
+                            São disciplinas que liberam pré-requisitos na cadeia até a formatura (como Redes, SBD2 e
+                            TCC). Adiar ou reprovar uma matéria crítica tende a atrasar a conclusão do curso em pelo
+                            menos 1 semestre.
+                        </span>
+                    </span>
+                </div>
+                <div class="kpi-value">6</div>
+                <div class="kpi-sub">matérias estratégicas</div>
+            </div>
+        </section>
+
+        <!-- CONTROLE DE CRÉDITOS (PONTO DE MELHORIA #2) + TOGGLE CRÉDITOS/HORAS -->
+        <section class="controls-bar">
+            <div class="credits-wrapper spot-target" id="spot2">
+                <button class="spot-pin" onclick="focusSpot(2)" title="Ver melhoria 2">2</button>
+                <div class="credits-row">
+                    <span>Créditos / semestre:</span>
+                    <input type="range" id="creditSlider" class="credits-slider" min="8" max="32" value="24"
+                        oninput="onSliderChange(this.value)" />
+                    <input type="number" id="creditInput" class="credits-input" value="24"
+                        onchange="onCreditInputChange(this.value)" />
+                    <span id="creditHoursLabel">cr (360h)</span>
+                    <span id="onboardingChip" class="onboarding-active-chip" style="display:none;">⚡ Adaptado p/ estágio
+                        (20 cr)</span>
+                    <button class="test-invalid-btn" onclick="simulateInvalidCredits()"
+                        title="Testa digitar 40 créditos fora do limite">
+                        Testar valor inválido (40 cr)
+                    </button>
+                </div>
+                <div id="creditFeedback" class="credits-feedback">
+                    <span>⚠️</span>
+                    <span>Informe de 8 a 32 créditos. O valor foi ajustado para a faixa permitida.</span>
+                </div>
+            </div>
+
+            <div class="unit-toggle">
+                <button class="unit-btn" id="btnUnitCr" onclick="setUnit('cr')">Créditos</button>
+                <button class="unit-btn active" id="btnUnitH" onclick="setUnit('h')">Horas</button>
+            </div>
+        </section>
+
+        <!-- PAINEL DE PREFERÊNCIAS DO ONBOARDING (PONTO DE MELHORIA #3) -->
+        <section class="onboarding-panel spot-target" id="spot3">
+            <button class="spot-pin" onclick="focusSpot(3)" title="Ver melhoria 3">3</button>
+            <div class="onboarding-group">
+                <span class="onboarding-label">⚙️ Preferências do Onboarding:</span>
+                <div class="opt-pill-group" aria-label="Trabalho ou estágio">
+                    <button class="opt-pill selected" id="btnWorkNo" onclick="setWork(false)">Não trabalho</button>
+                    <button class="opt-pill" id="btnWorkYes" onclick="setWork(true)">Trabalho / Estágio (C3)</button>
+                </div>
+                <div class="opt-pill-group" aria-label="Objetivo do plano">
+                    <button class="opt-pill selected" id="btnGoalBal"
+                        onclick="setGoal('equilibrio')">Equilíbrio</button>
+                    <button class="opt-pill" id="btnGoalFast" onclick="setGoal('velocidade')">Velocidade (C4)</button>
+                </div>
+            </div>
+            <div id="onboardingStatus" class="onboarding-status-msg ok">
+                ✓ Preferências conectadas ao gerador de grade
+            </div>
+        </section>
+
+        <!-- BANNER DE OPTATIVAS (EXATO DO NO FLUXO) -->
+        <div class="nf-banner">
+            <div class="nf-banner-text">
+                <span>⚠️</span>
+                <span>Faltam <strong>60h de optativas</strong> para escolher: o plano reservou o espaço nos semestres,
+                    mas as matérias ainda não foram definidas. Escolha com o Darcy AI para bater as horas e se
+                    formar.</span>
+            </div>
+            <button class="darcy-btn">✨ Escolher com o Darcy AI</button>
+        </div>
+
+        <!-- BARRA DE COMPLETUDE CURRICULAR (PONTO DE MELHORIA #4) -->
+        <div id="completenessBar" class="completeness-bar completeness-ok spot-target">
+            <button class="spot-pin" onclick="focusSpot(4)" title="Ver melhoria 4">4</button>
+            <div id="completenessText">
+                <strong>✓ Completude Curricular (CDO = 100%):</strong> Todas as 15 disciplinas obrigatórias pendentes do
+                histórico H0 estão contempladas no plano, incluindo <code>FGA0206</code>.
+            </div>
+            <span id="completenessPill" style="font-weight:700; font-family:'JetBrains Mono', monospace;">15 / 15
+                obrigatórias</span>
+        </div>
+
+        <!-- CANVAS SVELTE FLOW (COLUNAS E CARDS IDÊNTICOS AO NO FLUXO) -->
+        <section class="flow-canvas">
+            <div class="flow-columns" id="flowColumns">
+                <!-- Renderizado dinamicamente via JS -->
+            </div>
+
+            <div class="flow-zoom" aria-hidden="true">
+                <span>+</span>
+                <span>−</span>
+                <span>⛶</span>
+            </div>
+            <div class="flow-watermark">Svelte Flow</div>
+        </section>
+    </main>
+
+    <!-- ========== CARTÃO FLUTUANTE DE EXPLICAÇÃO PARA APRESENTAÇÃO ========== -->
+    <aside id="inspectorCard" class="inspector-card hidden">
+        <div class="inspector-top">
+            <span id="inspTag" class="inspector-tag">Melhoria #1</span>
+            <button class="inspector-close" onclick="closeInspector()" aria-label="Fechar">×</button>
+        </div>
+        <div id="inspTitle" class="inspector-title">Título da melhoria</div>
+        <div id="inspDesc" class="inspector-desc">Descrição</div>
+        <div class="inspector-metrics">
+            <div class="im-col im-before">
+                <span>Antes (No Fluxo Atual)</span>
+                <strong id="inspBefore">—</strong>
+            </div>
+            <div class="im-col im-after">
+                <span>Depois (Proposta)</span>
+                <strong id="inspAfter">—</strong>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        // Estado da demonstração
+        const state = {
+            mode: 'after',        // 'before' | 'after'
+            unit: 'h',            // 'h' | 'cr'
+            credits: 24,
+            work: false,          // C3: trabalho/estágio
+            goal: 'equilibrio',   // 'equilibrio' | 'velocidade' (C4)
+            activeSpot: null
+        };
+
+        const SPOTS_INFO = {
+            1: {
+                tag: 'Usabilidade · M-01 (H2)',
+                title: 'Explicação contextual de "Críticas" e "Estratégicas"',
+                desc: 'No estado atual, o card superior "CRÍTICAS / matérias estratégicas" e o selo laranja nos cards não explicam o critério ao aluno. A melhoria adiciona um ícone (?) acessível por mouse e teclado com a definição clara no ponto de uso.',
+                before: 'TCH = 80% · ISVH = 4 (Aceitável)',
+                after: 'TCH = 100% · ISVH = 0 (Excelente)',
+                elId: 'spot1'
+            },
+            2: {
+                tag: 'Usabilidade · M-01 (H9)',
+                title: 'Feedback explícito ao ajustar créditos inválidos',
+                desc: 'Ao digitar um valor fora da faixa 8–32 (como 40 créditos), o sistema atual corrige silenciosamente sem avisar o porquê. A melhoria exibe uma mensagem amigável informando a faixa permitida e o motivo do ajuste.',
+                before: 'Ajuste silencioso (Nota 0 no item 9)',
+                after: 'Mensagem clara 8–32 cr (Nota 1)',
+                elId: 'spot2'
+            },
+            3: {
+                tag: 'Adequação Funcional · COO',
+                title: 'Conexão real das preferências do Onboarding ao plano',
+                desc: 'Nos testes C3 e C4, marcar "Trabalho / Estágio" manteve a sugestão em 24 cr (esperado: 20 cr) e marcar "Velocidade" manteve 3 semestres (esperado: 2). Clique nos botões de preferência para comparar os dois modos.',
+                before: 'COO = 71,43% (5/7 expectativas)',
+                after: 'COO = 100% (7/7 expectativas)',
+                elId: 'spot3'
+            },
+            4: {
+                tag: 'Adequação Funcional · CDO',
+                title: 'Garantia de completude curricular (FGA0206)',
+                desc: 'No plano atual gerado para H0, a obrigatória pendente FGA0206 (Informática e Sociedade) ficou de fora sem aparecer em nenhuma lista de não alocadas. A melhoria garante sua alocação e exibe o contador 15/15 obrigatórias.',
+                before: 'CDO = 93,33% (14/15 · FGA0206 omitida)',
+                after: 'CDO = 100% (15/15 contempladas)',
+                elId: 'completenessBar'
+            },
+            5: {
+                tag: 'Adequação Funcional · TVS',
+                title: 'Validação de oferta semestral (FGA0244) e calendário',
+                desc: 'No estado atual, FGA0244 foi alocada em 2027.2 (fora da oferta de referência em semestres ímpares) e falhas de calendário atrasaram o início. A melhoria valida a oferta antes de alocar e exibe o selo de calendário verificado.',
+                before: 'TVS oferta = 10% · calendário = 33,33%',
+                after: 'TVS = 0% (oferta e calendário válidos)',
+                elId: 'spot5Card'
+            }
+        };
+
+        function formatLoad(hours) {
+            if (state.unit === 'cr') {
+                return `${Math.round(hours / 15)} cr`;
+            }
+            return `${hours}h`;
+        }
+
+        function setMode(newMode) {
+            state.mode = newMode;
+            document.getElementById('btnModeBefore').className = 'mode-btn ' + (newMode === 'before' ? 'active-before' : '');
+            document.getElementById('btnModeAfter').className = 'mode-btn ' + (newMode === 'after' ? 'active-after' : '');
+
+            // Reaplicar lógica de onboarding ao trocar de modo
+            applyOnboardingEffects();
+            renderAll();
+
+            // Se houver feedback aberto, limpa ao trocar para 'before'
+            if (newMode === 'before') {
+                document.getElementById('creditFeedback').classList.remove('visible');
+            }
+        }
+
+        function toggleHighlights(enabled) {
+            document.body.classList.toggle('show-highlights', enabled);
+        }
+
+        function setUnit(u) {
+            state.unit = u;
+            document.getElementById('btnUnitCr').classList.toggle('active', u === 'cr');
+            document.getElementById('btnUnitH').classList.toggle('active', u === 'h');
+            renderColumns();
+        }
+
+        function onSliderChange(val) {
+            state.credits = parseInt(val, 10);
+            document.getElementById('creditInput').value = state.credits;
+            document.getElementById('creditHoursLabel').textContent = `cr (${state.credits * 15}h)`;
+            document.getElementById('creditFeedback').classList.remove('visible');
+        }
+
+        function onCreditInputChange(raw) {
+            let val = parseInt(raw, 10);
+            let adjusted = false;
+            if (isNaN(val) || val < 8) {
+                val = 8;
+                adjusted = true;
+            } else if (val > 32) {
+                val = 32;
+                adjusted = true;
+            }
+            state.credits = val;
+            document.getElementById('creditInput').value = val;
+            document.getElementById('creditSlider').value = val;
+            document.getElementById('creditHoursLabel').textContent = `cr (${val * 15}h)`;
+
+            const fb = document.getElementById('creditFeedback');
+            const inputEl = document.getElementById('creditInput');
+            if (adjusted && state.mode === 'after') {
+                fb.classList.add('visible');
+                inputEl.classList.add('invalid-flash');
+                setTimeout(() => inputEl.classList.remove('invalid-flash'), 1200);
+            } else {
+                // No modo "Antes", corrige silenciosamente sem mostrar mensagem!
+                fb.classList.remove('visible');
+            }
+        }
+
+        function simulateInvalidCredits() {
+            const inputEl = document.getElementById('creditInput');
+            inputEl.value = 40;
+            setTimeout(() => {
+                onCreditInputChange(40);
+                focusSpot(2);
+            }, 150);
+        }
+
+        function setWork(isWorking) {
+            state.work = isWorking;
+            document.getElementById('btnWorkNo').classList.toggle('selected', !isWorking);
+            document.getElementById('btnWorkYes').classList.toggle('selected', isWorking);
+            applyOnboardingEffects();
+            renderAll();
+        }
+
+        function setGoal(goal) {
+            state.goal = goal;
+            document.getElementById('btnGoalBal').classList.toggle('selected', goal === 'equilibrio');
+            document.getElementById('btnGoalFast').classList.toggle('selected', goal === 'velocidade');
+            applyOnboardingEffects();
+            renderAll();
+        }
+
+        function applyOnboardingEffects() {
+            const chip = document.getElementById('onboardingChip');
+            if (state.mode === 'after') {
+                if (state.work) {
+                    state.credits = 20;
+                    chip.style.display = 'inline-flex';
+                } else if (state.goal === 'velocidade') {
+                    state.credits = 28;
+                    chip.style.display = 'none';
+                } else {
+                    state.credits = 24;
+                    chip.style.display = 'none';
+                }
+            } else {
+                // No modo "Antes" (bug real C3): marcar estágio mantém 24 créditos!
+                state.credits = 24;
+                chip.style.display = 'none';
+            }
+            document.getElementById('creditInput').value = state.credits;
+            document.getElementById('creditSlider').value = state.credits;
+            document.getElementById('creditHoursLabel').textContent = `cr (${state.credits * 15}h)`;
+        }
+
+        function renderAll() {
+            const isAfter = state.mode === 'after';
+
+            // KPIs
+            const isFastAfter = isAfter && state.goal === 'velocidade';
+            document.getElementById('kpiSemestres').textContent = isFastAfter ? '2' : '3';
+            document.getElementById('kpiFormatura').textContent = isFastAfter ? '2027.2' : '2028.1';
+            document.getElementById('calendarBadge').style.display = isAfter ? 'inline-flex' : 'none';
+
+            // Melhoria #1: Help trigger em CRÍTICAS
+            document.getElementById('helpCriticas').style.display = isAfter ? 'inline-flex' : 'none';
+
+            // Melhoria #3: Status do Onboarding
+            const obStatus = document.getElementById('onboardingStatus');
+            if (isAfter) {
+                if (state.work) {
+                    obStatus.className = 'onboarding-status-msg ok';
+                    obStatus.textContent = '✓ Estágio ativo: carga ajustada automaticamente para 20 cr (300h)';
+                } else if (state.goal === 'velocidade') {
+                    obStatus.className = 'onboarding-status-msg ok';
+                    obStatus.textContent = '✓ Velocidade ativa: plano comprimido para 2 semestres (2027.2)';
+                } else {
+                    obStatus.className = 'onboarding-status-msg ok';
+                    obStatus.textContent = '✓ Preferências conectadas ao gerador de grade (COO = 100%)';
+                }
+            } else {
+                if (state.work) {
+                    obStatus.className = 'onboarding-status-msg warn';
+                    obStatus.textContent = '✗ Falha C3: Estágio marcado, mas carga continuou travada em 24 cr';
+                } else if (state.goal === 'velocidade') {
+                    obStatus.className = 'onboarding-status-msg warn';
+                    obStatus.textContent = '✗ Falha C4: Velocidade marcada, mas plano continuou em 3 semestres';
+                } else {
+                    obStatus.className = 'onboarding-status-msg warn';
+                    obStatus.textContent = '⚠ Modo Atual: Estágio (C3) e Velocidade (C4) não alteram o plano';
+                }
+            }
+
+            // Melhoria #4: Barra de completude curricular (FGA0206)
+            const compBar = document.getElementById('completenessBar');
+            const compText = document.getElementById('completenessText');
+            const compPill = document.getElementById('completenessPill');
+            if (isAfter) {
+                compBar.className = 'completeness-bar completeness-ok spot-target';
+                compText.innerHTML = '<strong>✓ Completude Curricular (CDO = 100%):</strong> Todas as 15 obrigatórias pendentes de H0 estão alocadas — incluindo <code>FGA0206</code> (Informática e Sociedade).';
+                compPill.textContent = '15 / 15 obrigatórias';
+            } else {
+                compBar.className = 'completeness-bar completeness-bug spot-target';
+                compText.innerHTML = '<strong>✗ Lacuna Atual (CDO = 93,33%):</strong> A obrigatória <code>FGA0206</code> foi omitida do plano e a lista de não alocadas permaneceu vazia.';
+                compPill.textContent = '14 / 15 obrigatórias';
+            }
+
+            renderColumns();
+
+            // Reaplicar destaque do spot ativo se existir
+            if (state.activeSpot) {
+                applySpotFocusRing(state.activeSpot);
+            }
+        }
+
+        function renderColumns() {
+            const isAfter = state.mode === 'after';
+            const isFastAfter = isAfter && state.goal === 'velocidade';
+
+            const sem6 = [
+                { code: 'CEM0051', name: 'PROMOÇÃO DA SAÚDE 3', hours: 60, current: true },
+                { code: 'FGA0124', name: 'PROJETO DE ALGORITMOS', hours: 60, current: true },
+                { code: 'FGA0170', name: 'FUNDAMENTOS DE SISTEMAS OPERACIONAIS', hours: 60, current: true },
+                { code: 'FGA0208', name: 'ARQUITETURA E DESENHO DE SOFTWARE', hours: 60, current: true }
+            ];
+
+            // Semestre 7 (2027.1 — ÍMPAR)
+            const sem7 = [
+                { code: 'FGA0211', name: 'FUNDAMENTOS DE REDES DE COMPUTADORES', hours: 60, reason: 'alta prioridade', dif: true, critica: true, arrow: !isAfter },
+                { code: 'FGA0060', name: 'SISTEMAS DE BANCO DE DADOS 2', hours: 60, reason: '', dif: true, critica: false },
+                { code: 'FGA0240', name: 'GERÊNCIA DE CONFIGURAÇÃO E EVOLUÇÃO DE SOFTWARE', hours: 60, reason: '', dif: true, critica: false },
+                { code: 'FGA0009', name: 'TRABALHO DE CONCLUSÃO DE CURSO 1', hours: 60, reason: 'alocada para manter ritmo...', dif: true, critica: true, arrow: true }
+            ];
+
+            // Melhoria #4: FGA0206 aparece no plano no modo "Depois"
+            if (isAfter) {
+                sem7.push({
+                    code: 'FGA0206',
+                    name: 'INFORMÁTICA E SOCIEDADE',
+                    hours: 30,
+                    reason: 'obrigatória H0',
+                    dif: true,
+                    critica: false,
+                    addedFix: true
+                });
+            }
+
+            // Melhoria #5: No modo "Depois", FGA0244 é alocada em 2027.1 (ímpar - oferta válida) ou validada;
+            // No modo "Antes", FGA0244 fica em 2027.2 (par - fora da oferta de referência)
+            if (isAfter) {
+                sem7.push({
+                    code: 'FGA0244',
+                    name: 'PROGRAMAÇÃO PARA SISTEMAS PARALELOS E DISTRIBUÍDOS',
+                    hours: 60,
+                    reason: 'alta prioridade',
+                    dif: true,
+                    critica: true,
+                    ofertaStatus: 'ok',
+                    spot5: true
+                });
+            }
+
+            // Semestre 8 (2027.2 — PAR)
+            const sem8 = [];
+            if (!isAfter) {
+                sem8.push({
+                    code: 'FGA0244',
+                    name: 'PROGRAMAÇÃO PARA SISTEMAS PARALELOS E DISTRIBUÍDOS',
+                    hours: 60,
+                    reason: 'alta prioridade',
+                    dif: true,
+                    critica: true,
+                    ofertaStatus: 'warn',
+                    spot5: true
+                });
+            }
+            sem8.push(
+                { code: 'FGA0250', name: 'PROJETO INTEGRADOR DE ENGENHARIA 2', hours: 90, reason: '', dif: true, critica: true },
+                { code: 'FGA0021', name: 'ESTÁGIO SUPERVISIONADO', hours: 210, reason: 'alocada para manter ritmo...', dif: true, critica: true }
+            );
+
+            // Se Velocidade ativa no modo Depois (C4), TCC2 já fecha em 2027.2 (2 semestres restantes!)
+            const sem9 = [];
+            if (isFastAfter) {
+                sem8.push({
+                    code: 'FGA0011',
+                    name: 'TRABALHO DE CONCLUSÃO DE CURSO 2',
+                    hours: 90,
+                    reason: 'modo velocidade',
+                    dif: true,
+                    critica: true
+                });
+            } else {
+                sem9.push({
+                    code: 'FGA0011',
+                    name: 'TRABALHO DE CONCLUSÃO DE CURSO 2',
+                    hours: 90,
+                    reason: 'alocada para manter ritmo...',
+                    dif: true,
+                    critica: true
+                });
+            }
+
+            const columns = [
+                { title: 'Semestre 6 (Em Curso)', pct: '~73% integralizado', items: sem6, current: true },
+                { title: 'Semestre 7 (2027.1) — Recomendado', pct: isAfter ? '~86% integralizado' : '~84% integralizado', items: sem7 },
+                { title: 'Semestre 8 (2027.2) — Estimado', pct: isFastAfter ? '~100% integralizado' : '~94% integralizado', items: sem8 }
+            ];
+
+            if (sem9.length > 0) {
+                columns.push({ title: 'Semestre 9 (2028.1) — Estimado', pct: '~98% integralizado', items: sem9 });
+            }
+
+            const container = document.getElementById('flowColumns');
+            container.innerHTML = columns.map(col => {
+                const totalHours = col.items.reduce((acc, i) => acc + i.hours, 0);
+                const cardsHtml = col.items.map(item => {
+                    const cardClasses = [
+                        'disc-card',
+                        !item.current ? 'recommended' : '',
+                        item.addedFix ? 'added-fix' : '',
+                        item.ofertaStatus === 'warn' ? 'oferta-bug' : '',
+                        item.spot5 ? 'spot-target' : ''
+                    ].filter(Boolean).join(' ');
+
+                    const criticaHtml = item.critica ? (
+                        isAfter
+                            ? `<span class="badge-critica has-tip">🔥 Crítica
+                   <span class="mini-tip"><strong>Matéria Crítica:</strong> Trava pré-requisitos até a formatura. Priorizá-la evita atraso no curso.</span>
+                 </span>`
+                            : `<span class="badge-critica">🔥 Crítica</span>`
+                    ) : '';
+
+                    const difHtml = item.dif ? `<span class="badge-dif">∿ Dif: Baixa</span>` : '';
+
+                    const addedTag = item.addedFix
+                        ? `<div class="badge-new-tag">✓ Recuperada no plano (CDO 100%)</div>`
+                        : '';
+
+                    let ofertaHtml = '';
+                    if (item.ofertaStatus === 'ok') {
+                        ofertaHtml = `<div class="badge-oferta ok">✓ Oferta validada: semestre ímpar (2027.1)</div>`;
+                    } else if (item.ofertaStatus === 'warn') {
+                        ofertaHtml = `<div class="badge-oferta warn">⚠️ Sem alerta no atual: alocada em 2027.2 (par), fora da oferta ímpar</div>`;
+                    }
+
+                    const pin5 = item.spot5
+                        ? `<button class="spot-pin" onclick="focusSpot(5)" title="Ver melhoria 5">5</button>`
+                        : '';
+
+                    const arrowHtml = item.arrow ? `<div class="connector-arrow"></div>` : '';
+
+                    return `
+            <div class="${cardClasses}" ${item.spot5 ? 'id="spot5Card"' : ''}>
+              ${pin5}
+              ${addedTag}
+              <div class="disc-card-top">
+                <span class="disc-code">${item.code}</span>
+                <span class="disc-hours">${formatLoad(item.hours)}</span>
+              </div>
+              <div class="disc-name">${item.name}</div>
+              ${(!item.current) ? `
+                <div class="disc-footer">
+                  <span class="disc-reason">${item.reason || ''}</span>
+                  <div class="disc-badges">
+                    ${difHtml}
+                    ${criticaHtml}
+                  </div>
+                </div>
+              ` : ''}
+              ${ofertaHtml}
+              ${arrowHtml}
+            </div>
+          `;
+                }).join('');
+
+                return `
+          <div class="sem-col">
+            <div class="sem-header">
+              <div class="sem-header-top">
+                <span style="color:#3b82f6;">📅</span>
+                <span>${col.title}</span>
+              </div>
+              <div class="sem-progress">${col.pct}</div>
+              <div class="sem-load-meta">${formatLoad(totalHours)} planejados</div>
+            </div>
+            ${cardsHtml}
+          </div>
+        `;
+            }).join('');
+        }
+
+        function applySpotFocusRing(spotNum) {
+            document.querySelectorAll('.spot-target').forEach(el => el.classList.remove('spot-focused'));
+            document.querySelectorAll('.tour-pill').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.spot, 10) === spotNum);
+            });
+            const info = SPOTS_INFO[spotNum];
+            if (!info) return;
+            const target = document.getElementById(info.elId);
+            if (target) {
+                target.classList.add('spot-focused');
+            }
+        }
+
+        function focusSpot(spotNum) {
+            state.activeSpot = spotNum;
+            const info = SPOTS_INFO[spotNum];
+            if (!info) return;
+
+            // Garantir destaques ativos
+            document.getElementById('chkHighlights').checked = true;
+            toggleHighlights(true);
+
+            applySpotFocusRing(spotNum);
+
+            const target = document.getElementById(info.elId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Se clicou no ponto 1 no modo 'after', abre tooltip por 2.5s para demonstração
+            const helpTrigger = document.getElementById('helpCriticas');
+            if (spotNum === 1 && state.mode === 'after' && helpTrigger) {
+                helpTrigger.classList.add('force-open');
+                setTimeout(() => helpTrigger.classList.remove('force-open'), 3200);
+            }
+
+            // Atualizar painel explicativo flutuante
+            document.getElementById('inspTag').textContent = info.tag;
+            document.getElementById('inspTitle').textContent = info.title;
+            document.getElementById('inspDesc').textContent = info.desc;
+            document.getElementById('inspBefore').textContent = info.before;
+            document.getElementById('inspAfter').textContent = info.after;
+            document.getElementById('inspectorCard').classList.remove('hidden');
+        }
+
+        function closeInspector() {
+            state.activeSpot = null;
+            document.getElementById('inspectorCard').classList.add('hidden');
+            document.querySelectorAll('.spot-target').forEach(el => el.classList.remove('spot-focused'));
+            document.querySelectorAll('.tour-pill').forEach(el => el.classList.remove('active'));
+        }
+
+        // Inicialização
+        renderAll();
+    </script>
+</body>
+
+</html>
