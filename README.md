@@ -16,14 +16,14 @@ Não requer instalação de dependências nem servidor: basta abrir o arquivo `i
 
 ## Acesso Online (GitHub Pages)
 
-O protótipo está configurado para publicação automática via GitHub Actions em:
+O protótipo está configurado para publicação direta pelo GitHub Pages a partir da branch `main`:
 
 - **URL:** `https://gotc2607.github.io/Prot-tipo-JEAN-SAMMET/`
 
 ### Ativação no GitHub (primeira vez)
 
-1. Faça push das alterações para a branch `main`.
-2. No repositório no GitHub, acesse **Settings → Pages → Build and deployment**.
-3. Em **Source**, selecione **GitHub Actions**.
-4. O workflow `.github/workflows/deploy-pages.yml` publicará o site automaticamente a cada push na `main` (também pode ser acionado manualmente na aba **Actions**).
+1. No repositório no GitHub, acesse **Settings → Pages → Build and deployment**.
+2. Em **Source**, selecione **Deploy from a branch**.
+3. Em **Branch**, selecione `main` e a pasta `/ (root)`, e clique em **Save**.
+4. Em cerca de 1 minuto o site estará publicado automaticamente a cada push na `main`.
 
